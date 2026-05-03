@@ -1,4 +1,4 @@
-/* ページフェードイン */
+/* ===== ページフェードイン ===== */
 .page-enter {
   position: fixed;
   inset: 0;
@@ -8,36 +8,43 @@
   pointer-events: none;
 }
 @keyframes pageFadeOut {
-  to { opacity: 0; visibility: hidden; }
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
-/* メインエリア */
+/* ===== メインエリア ===== */
 .main-area {
   height: calc(100vh - 72px);
   position: relative;
   overflow: hidden;
 }
 
-/* モード切替 */
+/* ===== モード切替アニメーション ===== */
 .mode-view {
   position: absolute;
   inset: 0;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .mode-view.active {
   opacity: 1;
   pointer-events: all;
+  animation: fadeIn 0.5s ease;
 }
 
 /* ===== 下部ナビゲーション ===== */
 .bottom-nav {
   position: fixed;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 72px;
-  background: #1e140a;
-  border-top: 1px solid rgba(180,140,70,0.12);
+  background: rgba(30,20,10,0.95);
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(212,168,85,0.15);
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -53,32 +60,59 @@
   align-items: center;
   justify-content: center;
   gap: 4px;
-  color: rgba(180,140,70,0.3);
-  transition: color 0.3s;
+  color: rgba(212,168,85,0.35);
+  transition: all 0.3s;
   position: relative;
+  cursor: pointer;
 }
 .nav-btn::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  bottom: 8px;
   left: 50%;
   transform: translateX(-50%);
   width: 0;
   height: 2px;
-  background: #d4a855;
+  background: linear-gradient(90deg, #d4a855, #e8c06a);
+  border-radius: 2px;
   transition: width 0.3s ease;
 }
-.nav-btn.active { color: #d4a855; }
-.nav-btn.active::after { width: 32px; }
-.nav-btn:hover { color: rgba(180,140,70,0.65); }
-.nav-icon  { font-size: 20px; line-height: 1; }
-.nav-label { font-size: 10px; letter-spacing: 0.15em; }
+.nav-btn::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #d4a855, #e8c06a);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+.nav-btn.active {
+  color: #d4a855;
+}
+.nav-btn.active::after, .nav-btn.active::before {
+  width: 40px;
+}
+.nav-btn:hover {
+  color: rgba(212,168,85,0.7);
+  transform: translateY(-2px);
+}
+.nav-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+.nav-label {
+  font-size: 9px;
+  letter-spacing: 0.15em;
+}
 
 /* ===== 本ビューワー ===== */
 .book-viewer {
   position: fixed;
   inset: 0;
-  background: rgba(10, 8, 5, 0.95);
+  background: rgba(10, 8, 5, 0.98);
   z-index: 150;
   display: flex;
   flex-direction: column;
@@ -86,7 +120,8 @@
   justify-content: center;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(8px);
 }
 .book-viewer.open {
   opacity: 1;
@@ -94,18 +129,23 @@
 }
 .viewer-close {
   position: absolute;
-  top: 24px; right: 32px;
-  background: transparent;
-  border: 1px solid rgba(180,140,70,0.3);
-  color: rgba(180,140,70,0.6);
-  width: 36px; height: 36px;
+  top: 28px;
+  right: 36px;
+  background: rgba(212,168,85,0.1);
+  border: 1px solid rgba(212,168,85,0.3);
+  color: rgba(212,168,85,0.7);
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
-  font-size: 14px;
+  font-size: 18px;
   transition: all 0.2s;
+  cursor: pointer;
 }
 .viewer-close:hover {
-  border-color: rgba(180,140,70,0.7);
+  transform: rotate(90deg);
+  border-color: #d4a855;
   color: #d4a855;
+  background: rgba(212,168,85,0.2);
 }
 
 /* 3D本 */
@@ -114,67 +154,75 @@
   position: relative;
   perspective: 1200px;
   transform-style: preserve-3d;
+  animation: fadeInScale 0.5s ease;
 }
 .book-page {
-  width: 280px;
-  height: 380px;
-  background: #faf8f0;
+  width: 320px;
+  height: 440px;
+  background: linear-gradient(145deg, #faf8f0, #f5f0e5);
   padding: 32px 28px;
-  overflow: hidden;
+  overflow-y: auto;
   position: relative;
   font-size: 13px;
   line-height: 1.9;
   color: #2a1f0e;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
 }
 .page-left {
-  border-radius: 4px 0 0 4px;
-  box-shadow: -4px 0 20px rgba(0,0,0,0.5);
+  border-radius: 6px 0 0 6px;
   border-right: 1px solid rgba(0,0,0,0.08);
   transform-origin: right center;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .page-right {
-  border-radius: 0 4px 4px 0;
-  box-shadow: 4px 0 20px rgba(0,0,0,0.5);
+  border-radius: 0 6px 6px 0;
   transform-origin: left center;
   transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.page-left.turning  { transform: rotateY(-160deg); }
-.page-right.turning { transform: rotateY(160deg); }
+.page-left.turning {
+  transform: rotateY(-160deg);
+}
+.page-right.turning {
+  transform: rotateY(160deg);
+}
 
 .book-spine-3d {
   position: absolute;
   left: 50%;
-  top: 0; bottom: 0;
-  width: 16px;
+  top: 0;
+  bottom: 0;
+  width: 20px;
   transform: translateX(-50%);
   background: linear-gradient(to right, #3a2510, #5c3a1e, #3a2510);
-  box-shadow: 0 0 10px rgba(0,0,0,0.6);
+  box-shadow: 0 0 12px rgba(0,0,0,0.5);
+  border-radius: 2px;
   z-index: 5;
 }
 
 .viewer-controls {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-top: 28px;
+  gap: 28px;
+  margin-top: 32px;
 }
 .viewer-nav {
-  background: transparent;
-  border: 1px solid rgba(180,140,70,0.3);
-  color: rgba(180,140,70,0.7);
-  width: 40px; height: 40px;
+  background: rgba(212,168,85,0.1);
+  border: 1px solid rgba(212,168,85,0.3);
+  color: rgba(212,168,85,0.7);
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  font-size: 20px;
+  font-size: 22px;
   transition: all 0.2s;
-  line-height: 1;
+  cursor: pointer;
 }
 .viewer-nav:hover {
-  border-color: rgba(180,140,70,0.7);
+  transform: scale(1.05);
+  border-color: #d4a855;
   color: #d4a855;
 }
 .page-num {
   font-size: 11px;
-  color: rgba(180,140,70,0.45);
+  color: rgba(212,168,85,0.45);
   letter-spacing: 0.15em;
 }
